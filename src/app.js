@@ -57,29 +57,4 @@ app.use(async (err, req, res, next) => {
   });
 });
 
-const exitHandler = () => {
-  if (server) {
-    server.close(() => {
-      console.log("Server closed");
-      process.exit(1);
-    });
-  } else {
-    process.exit(1);
-  }
-};
-
-const handleUnexpectedError = (error) => {
-  console.log("🚀 ~ handleUnexpectedError ~ error:", error);
-  console.error(error);
-  exitHandler();
-};
-
-process.on("uncaughtException", handleUnexpectedError);
-process.on("unhandledRejection", handleUnexpectedError);
-
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received, shutting down gracefully...");
-  exitHandler();
-});
-
 export default app;
