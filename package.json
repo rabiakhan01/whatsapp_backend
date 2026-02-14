@@ -5,11 +5,24 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon ./src/index.js"
+    "start": "node ./src/index.js",
+    "dev": "cross-env NODE_ENV=development nodemon ./src/index.js"
   },
   "dependencies": {
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "nodemon": "^3.1.11"
+    "express-fileupload": "^1.5.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "helmet": "^8.1.0",
+    "http-errors": "^2.0.1",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.11",
+    "trim-request": "^1.0.6"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
   }
 }
