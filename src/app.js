@@ -13,7 +13,7 @@ import routes from "./routes/index.js";
 const app = express();
 dotenv.config();
 // Morging middleware for logging HTTP requests in development mode
-app.use(morgan("dev"));
+app.use(morgan("dev")); 
 
 // helmet for setting various HTTP headers for app security
 app.use(helmet());
