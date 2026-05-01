@@ -82,6 +82,10 @@ export const login = async (req, res, next) => {
 };
 export const logout = async (req, res, next) => {
   try {
+    res.clearCookie("refreshtoken", { path: "/api/v1/auth/refreshtoken" });
+    res.json({
+      message: "User logout successfully.",
+    });
   } catch (error) {
     next(error);
   }
