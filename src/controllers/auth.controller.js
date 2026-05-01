@@ -1,4 +1,4 @@
-import { createUser } from "../services/auth.service.js";
+import { createUser, signInUser } from "../services/auth.service.js";
 import { generateToken } from "../services/token.service.js";
 
 export const register = async (req, res, next) => {
@@ -23,8 +23,10 @@ export const register = async (req, res, next) => {
     );
     res.cookie("refreshtoken", refresh_token, {
       httpOnly: true,
-      path: "/api/v1/auth/refreshtoken",
+      path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: "lax", // or "none" if cross-origin
+      secure: false, // true only with HTTPS
     });
     res.json({
       message: "User created successfully",
@@ -41,8 +43,39 @@ export const register = async (req, res, next) => {
     next(error);
   }
 };
+
 export const login = async (req, res, next) => {
   try {
+    const { email, password } = req.body;
+    const user = await signInUser(email, password);
+    const access_token = await generateToken(
+      { userId: user?.i_id },
+      "1d",
+      process.env.ACCESS_TOKEN_SECRET,
+    );
+    const refresh_token = await generateToken(
+      { userId: user?.i_id },
+      "30d",
+      process.env.REFRESH_TOKEN_SECRET,
+    );
+    res.cookie("refreshtoken", refresh_token, {
+      httpOnly: true,
+      path: "/",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: "lax", // or "none" if cross-origin
+      secure: false, // true only with HTTPS
+    });
+    res.json({
+      message: "User loggedin successfully",
+      access_token: access_token,
+      user: {
+        _id: user?._id,
+        name: user?.name,
+        email: user?.email,
+        picture: user?.picture,
+        status: user?.status,
+      },
+    });
   } catch (error) {
     next(error);
   }
