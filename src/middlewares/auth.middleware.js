@@ -1,18 +1,20 @@
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 
-export default authMiddleware = (req, res, next) => {
+const authMiddleware = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   if (!authHeader) {
-    next(createHttpError.Unauthorized());
+    return next(createHttpError.Unauthorized());
   }
   const bearerToken = authHeader.split(" ")[1];
-  jwt.verify(bearerToken, process.env.JWT_SECRET_KEY, (err, payload) => {
+  jwt.verify(bearerToken, process.env.ACCESS_TOKEN_SECRET, (err, payload) => {
     if (err) {
-      next(createHttpError.Unauthorized());
+      return next(createHttpError.Unauthorized());
     } else {
       req.user = payload;
       next();
     }
   });
 };
+
+export default authMiddleware;

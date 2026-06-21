@@ -38,7 +38,6 @@ const exitHandler = () => {
 
 const handleUnexpectedError = (error) => {
   console.log("🚀 ~ handleUnexpectedError ~ error:", error);
-  console.error(error);
   exitHandler();
 };
 
