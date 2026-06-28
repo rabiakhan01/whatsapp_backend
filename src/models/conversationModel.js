@@ -1,4 +1,6 @@
-import mongoose, { Collection } from "mongoose";
+import mongoose from "mongoose";
+import pkg from 'mongoose';
+const { Collection } = pkg;
 
 const { ObjectId } = mongoose.Schema.Types;
 const conversationSchema = mongoose.Schema(
@@ -16,25 +18,25 @@ const conversationSchema = mongoose.Schema(
     users: [
       {
         type: ObjectId,
-        ref: "UserModal",
+        ref: "UserModel",
       },
     ],
     latestMessage: {
       type: ObjectId,
-      ref: "MessageModal",
+      ref: "MessageModel",
     },
     admin: {
       type: ObjectId,
-      ref: "UserModal",
+      ref: "UserModel",
     },
   },
   {
-    Collection: "converation",
+    Collection: "conversation",
     timestamps: true,
   },
 );
 
-const ConversationModal =
-  mongoose.models.conversationModal || mongoose.model("ConversationModal", conversationSchema);
+const ConversationModel =
+  mongoose.models.ConversationModel || mongoose.model("ConversationModel", conversationSchema);
 
-export default ConversationModal;
+export default ConversationModel;
