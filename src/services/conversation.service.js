@@ -18,7 +18,7 @@ export const doesConversationExists = async ({ sender_id, receiver_id }) => {
     path: "latestMessage.sender",
     select: "name email picture status",
   });
-  return convos[0]
+  return convos[0];
 };
 
 export const createConversation = async (data) => {
@@ -41,4 +41,27 @@ export const populateConversation = async (
     throw createHttpError.BadRequest("Opps....Something wents wrong");
   }
   return populatedConvo;
+};
+
+export const getConversations = async (user_id) => {
+  let conversations;
+  await ConversationModel.find({
+    users: { $elemMatch: { $eq: user_id } },
+  })
+    .populate("users", "-password")
+    .populate("admin", "-password")
+    .populate("latestMessage")
+    .sort({ updatedAt: -1 })
+    .then(async (results) => {
+      results = await UserModel.populate(results, {
+        path: "latestMessage.sender",
+        select: "name email picture status",
+      });
+      conversations = results;
+    })
+    .catch((error) => {
+      throw createHttpError.BadRequest("Ooops... Something wents wrong");
+    });
+
+  return conversations;
 };
